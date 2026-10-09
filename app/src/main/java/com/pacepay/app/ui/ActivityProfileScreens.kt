@@ -277,7 +277,7 @@ fun ProfileScreen(
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Your payment QR", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
             Text(
-                "Create a shareable QR for your own UPI ID. No bank account is connected to Pace Pay.",
+                "Create a shareable QR for your own UPI ID. Payers authorize transfers in the UPI app they choose.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 12.sp,
                 lineHeight = 17.sp,
@@ -386,7 +386,7 @@ fun ProfileScreen(
         }
 
         Text(
-            "Pace Pay · Prototype provider hand-off · v1.0.0",
+            "Pace Pay · Works with your installed UPI app · v1.0.0",
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 11.sp,

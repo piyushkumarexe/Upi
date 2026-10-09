@@ -3,7 +3,6 @@ package com.pacepay.app.ui
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
@@ -148,16 +147,10 @@ fun PacePayApp(
             showMessage("Check the amount and try again.")
             return
         }
+        // Don't preflight this intent with PackageManager: Android 11+ package visibility
+        // and provider-specific intent filters can hide valid UPI apps. Let the system
+        // chooser resolve all installed UPI providers (PhonePe, Google Pay, Paytm, BHIM, etc.).
         val paymentIntent = Intent(Intent.ACTION_VIEW, uri)
-        val handlers = try {
-            context.packageManager.queryIntentActivities(paymentIntent, PackageManager.MATCH_DEFAULT_ONLY)
-        } catch (_: Exception) {
-            emptyList()
-        }
-        if (handlers.isEmpty()) {
-            showMessage("No compatible UPI app was found. Install a trusted UPI app and try again.")
-            return
-        }
 
         val transaction = PaymentTransaction(
             id = UUID.randomUUID().toString(),

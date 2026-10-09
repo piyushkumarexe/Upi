@@ -250,7 +250,7 @@ fun PaymentReviewScreen(
 
         SecurityCallout(
             title = "One last check in your UPI app",
-            body = "Pace Pay will open an installed UPI provider. Verify the recipient and amount there before authorizing.",
+            body = "Choose an installed app such as PhonePe, Google Pay, Paytm or BHIM. Verify the recipient and amount there before authorizing.",
         )
 
         PrimaryButton(
