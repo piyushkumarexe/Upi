@@ -32,7 +32,22 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run unit tests
-        run: ./gradlew --no-daemon :app:testDebugUnitTest
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest 2>&1 | tee "$RUNNER_TEMP/gradle-test.log"
+
+      - name: Surface Gradle diagnostics
+        if: failure()
+        run: |
+          if [ -f "$RUNNER_TEMP/gradle-test.log" ]; then
+            echo "### Gradle failure details" >> "$GITHUB_STEP_SUMMARY"
+            echo '```text' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 100 "$RUNNER_TEMP/gradle-test.log" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            grep -E '(^e: |error:|FAILURE:|What went wrong:|Execution failed)' "$RUNNER_TEMP/gradle-test.log" | tail -n 12 | while IFS= read -r line; do
+              echo "::error title=Gradle diagnostic::$line"
+            done
+          fi
 
       - name: Build debug APK
         run: ./gradlew --no-daemon :app:assembleDebug
